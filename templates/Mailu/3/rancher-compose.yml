@@ -13,7 +13,7 @@ version: '2'
   - variable: VERSION
     label: "Version"
     description: "Mailu version to run (1.0, 1.1, etc. or master)."
-    default: "1.5.1"
+    default: "1.5"
     required: true
     type: string
   - variable: SECRET_KEY
