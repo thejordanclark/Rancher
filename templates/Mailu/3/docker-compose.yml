@@ -75,7 +75,9 @@ services:
       - "$ROOT/certs:/certs"
       {{- end}}
     labels:
-      io.rancher.scheduler.affinity:host_label: role=worker
+      {{- if .Value.WORKER_HOST_LABEL}}
+      io.rancher.scheduler.affinity:host_label: ${WORKER_HOST_LABEL}
+      {{- end}}
       mailu-rancher: ${DOMAIN}
   redis:
     image: redis:alpine
@@ -487,3 +489,27 @@ services:
       {{- end}}
     labels:
       io.rancher.scheduler.affinity:container_label: mailu-rancher=${DOMAIN}
+  loadbalancer:
+    image: rancher/lb-service-haproxy:${RANCHER_LB_VERSION}
+    ports:
+    - ${PORT_HTTP}:${PORT_HTTP}/tcp
+    - ${PORT_HTTPS}:${PORT_HTTPS}/tcp
+    - ${PORT_POP3}:${PORT_POP3}/tcp
+    - ${PORT_IMAP}:${PORT_IMAP}/tcp
+    - ${PORT_IMAPS}:${PORT_IMAPS}/tcp
+    - ${PORT_POP3S}:${PORT_POP3S}/tcp
+    - ${PORT_SMTP}:${PORT_SMTP}/tcp
+    - ${PORT_SMTPS}:${PORT_SMTPS}/tcp
+    - ${PORT_SUBMISSION}:${PORT_SUBMISSION}/tcp
+    labels:
+      {{- if .Value.SERVICE_HOST_LABEL}}
+      io.rancher.scheduler.affinity:host_label: role=service
+      {{- else}}
+      io.rancher.scheduler.affinity:container_label: mailu-rancher=${DOMAIN}
+      {{- end}}
+      io.rancher.container.agent.role: environmentAdmin,agent
+      io.rancher.container.agent_service.drain_provider: 'true'
+      io.rancher.container.create_agent: 'true'
+      {{- if .Value.SERVICE_HOST_LABEL}}
+      io.rancher.scheduler.global: 'true'
+      {{- end}}

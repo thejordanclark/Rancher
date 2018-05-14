@@ -200,3 +200,133 @@ version: '2'
       - "SHA256-CRYPT"
       - "MD5-CRYPT"
       - "CRYPT"
+  - variable: WORKER_HOST_LABEL
+    label: "Host label on worker node"
+    description: "This is used for host affinity to schedule mailu services on a node, e.g role=worker"
+    required: false
+    type: string
+  - variable: SERVICE_HOST_LABEL
+    label: "Host label on service node"
+    description: "This is used for host affinity to schedule mailu ports on a node this node will listen on the ports defined below, e.g role=service"
+    required: false
+    type: string
+  - variable: RANCHER_LB_VERSION
+    label: "The version of Rancher Load Balancer to deploy"
+    description: "This is to allow different versions of rancher/lb-service-haproxy to be deployed"
+    default: "v0.9.1"
+    required: true
+    type: string
+  - variable: PORT_HTTP
+    label: "Public HTTP Port"
+    description: "External Port for HTTP on the node defined as the Service node"
+    default: 80
+    required: true
+    type: int
+  - variable: PORT_HTTPS
+    label: "Public HTTPS Port"
+    description: "External Port for HTTPS on the node defined as the Service node"
+    default: 443
+    required: true
+    type: int
+  - variable: PORT_POP3
+    label: "Public POP3 Port"
+    description: "External Port for POP3 on the node defined as the Service node"
+    default: 110
+    required: true
+    type: int
+  - variable: PORT_IMAP
+    label: "Public IMAP Port"
+    description: "External Port for IMAP on the node defined as the Service node"
+    default: 143
+    required: true
+    type: int
+  - variable: PORT_IMAPS
+    label: "Public IMAPS Port"
+    description: "External Port for IMAPS on the node defined as the Service node"
+    default: 993
+    required: true
+    type: int
+  - variable: PORT_POP3S
+    label: "Public POP3S Port"
+    description: "External Port for POP3S on the node defined as the Service node"
+    default: 995
+    required: true
+    type: int
+  - variable: PORT_SMTP
+    label: "Public SMTP Port"
+    description: "External Port for SMTP on the node defined as the Service node"
+    default: 25
+    required: true
+    type: int
+  - variable: PORT_SMTPS
+    label: "Public SMTPS Port"
+    description: "External Port for SMTPS on the node defined as the Service node"
+    default: 465
+    required: true
+    type: int
+  - variable: PORT_SUBMISSION
+    label: "Public Submission Port"
+    description: "External Port for Submission on the node defined as the Service node"
+    default: 587
+    required: true
+    type: int
+services:
+  loadbalancer:
+    start_on_create: true
+    lb_config:
+      certs: []
+      port_rules:
+      - hostname: ''
+        priority: 1
+        protocol: http
+        service: front
+        source_port: ${PORT_HTTP}
+        target_port: 80
+      - priority: 2
+        protocol: tcp
+        service: front
+        source_port: ${PORT_HTTPS}
+        target_port: 443
+      - priority: 3
+        protocol: tcp
+        service: front
+        source_port: ${PORT_POP3}
+        target_port: 110
+      - priority: 4
+        protocol: tcp
+        service: front
+        source_port: ${PORT_IMAP}
+        target_port: 143
+      - priority: 5
+        protocol: tcp
+        service: front
+        source_port: ${PORT_IMAPS}
+        target_port: 993
+      - priority: 6
+        protocol: tcp
+        service: front
+        source_port: ${PORT_POP3S}
+        target_port: 995
+      - priority: 7
+        protocol: tcp
+        service: front
+        source_port: ${PORT_SMTP}
+        target_port: 25
+      - priority: 8
+        protocol: tcp
+        service: front
+        source_port: ${PORT_SMTPS}
+        target_port: 465
+      - priority: 9
+        protocol: tcp
+        service: front
+        source_port: ${PORT_SUBMISSION}
+        target_port: 587
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 42
+      unhealthy_threshold: 3
+      initializing_timeout: 60000
+      interval: 2000
+      reinitializing_timeout: 60000
