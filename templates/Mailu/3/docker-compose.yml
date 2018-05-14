@@ -1,6 +1,6 @@
 version: '2'
 volumes:
-  {{.Values.VOLUME_PREFIX}-redis:
+  {{.Values.VOLUME_PREFIX}}-redis:
     driver: ${STORAGE_DRIVER}
   {{.Values.VOLUME_PREFIX}}-certs:
     driver: ${STORAGE_DRIVER}
