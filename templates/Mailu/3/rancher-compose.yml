@@ -12,9 +12,8 @@ version: '2'
     type: string
   - variable: STORAGE_DRIVER
     label: "Storage Driver"
-    description: "Set this to the Ranhcer data Driver user for Rancher Volumes"
-    default: "rancher-nfs"
-    required: true
+    description: "Set this to the Ranhcer data Driver user for Rancher Volumes, example - rancher-nfs"
+    required: false
     type: string
   - variable: ROOT
     label: "Root Path"
