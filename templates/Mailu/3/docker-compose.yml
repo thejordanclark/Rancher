@@ -137,7 +137,7 @@ services:
       - "$VOLUME_PREFIX-data:/data"
       - "$VOLUME_PREFIX-mail:/mail"
       - "$VOLUME_PREFIX-overrides:/overrides"
-      - "$VOLUME_PREFIX-overrides-rspamd:/overrides/rspamd"
+      - "$VOLUME_PREFIX-overrides-rspamd:/overrides-rspamd"
     depends_on:
       - front
     labels:
@@ -180,7 +180,7 @@ services:
     volumes:
       - "$VOLUME_PREFIX-data:/data"
       - "$VOLUME_PREFIX-overrides:/overrides"
-      - "$VOLUME_PREFIX-overrides-rspamd:/overrides/rspamd"
+      - "$VOLUME_PREFIX-overrides-rspamd:/overrides-rspamd"
     depends_on:
       - front
     labels:
