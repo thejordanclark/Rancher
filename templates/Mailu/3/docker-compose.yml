@@ -75,7 +75,7 @@ services:
       - "$ROOT/certs:/certs"
       {{- end}}
     labels:
-      {{- if .Value.WORKER_HOST_LABEL}}
+      {{- if .Values.WORKER_HOST_LABEL}}
       io.rancher.scheduler.affinity:host_label: ${WORKER_HOST_LABEL}
       {{- end}}
       mailu-rancher: ${DOMAIN}
@@ -502,14 +502,14 @@ services:
     - ${PORT_SMTPS}:${PORT_SMTPS}/tcp
     - ${PORT_SUBMISSION}:${PORT_SUBMISSION}/tcp
     labels:
-      {{- if .Value.SERVICE_HOST_LABEL}}
-      io.rancher.scheduler.affinity:host_label: role=service
+      {{- if .Values.SERVICE_HOST_LABEL}}
+      io.rancher.scheduler.affinity:host_label: ${SERVICE_HOST_LABEL}
       {{- else}}
       io.rancher.scheduler.affinity:container_label: mailu-rancher=${DOMAIN}
       {{- end}}
       io.rancher.container.agent.role: environmentAdmin,agent
       io.rancher.container.agent_service.drain_provider: 'true'
       io.rancher.container.create_agent: 'true'
-      {{- if .Value.SERVICE_HOST_LABEL}}
+      {{- if .Values.SERVICE_HOST_LABEL}}
       io.rancher.scheduler.global: 'true'
       {{- end}}
