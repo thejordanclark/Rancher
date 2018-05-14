@@ -1,20 +1,22 @@
 version: '2'
 volumes:
-  {{.Values.VOLUME_PREFIX}}-redis:
-    driver: ${STORAGE_DRIVER}
   {{.Values.VOLUME_PREFIX}}-certs:
     driver: ${STORAGE_DRIVER}
   {{.Values.VOLUME_PREFIX}}-data:
+    driver: ${STORAGE_DRIVER}
+  {{.Values.VOLUME_PREFIX}}-dav:
+    driver: ${STORAGE_DRIVER}
+  {{.Values.VOLUME_PREFIX}}-dkim:
+    driver: ${STORAGE_DRIVER}
+  {{.Values.VOLUME_PREFIX}}-filter:
     driver: ${STORAGE_DRIVER}
   {{.Values.VOLUME_PREFIX}}-mail:
     driver: ${STORAGE_DRIVER}
   {{.Values.VOLUME_PREFIX}}-overrides:
     driver: ${STORAGE_DRIVER}
-  {{.Values.VOLUME_PREFIX}}-filter:
+  {{.Values.VOLUME_PREFIX}}-overrides-rspamd:
     driver: ${STORAGE_DRIVER}
-  {{.Values.VOLUME_PREFIX}}-dkim:
-    driver: ${STORAGE_DRIVER}
-  {{.Values.VOLUME_PREFIX}}-dav:
+  {{.Values.VOLUME_PREFIX}}-redis:
     driver: ${STORAGE_DRIVER}
   {{.Values.VOLUME_PREFIX}}-webmail:
     driver: ${STORAGE_DRIVER}
@@ -137,7 +139,7 @@ services:
       - "$VOLUME_PREFIX-data:/data"
       - "$VOLUME_PREFIX-mail:/mail"
       - "$VOLUME_PREFIX-overrides:/overrides"
-      - "$VOLUME_PREFIX-overrides-rspamd:/overrides-rspamd"
+      - "$VOLUME_PREFIX-overrides-rspamd:/overrides/rspamd"
     depends_on:
       - front
     labels:
@@ -180,7 +182,7 @@ services:
     volumes:
       - "$VOLUME_PREFIX-data:/data"
       - "$VOLUME_PREFIX-overrides:/overrides"
-      - "$VOLUME_PREFIX-overrides-rspamd:/overrides-rspamd"
+      - "$VOLUME_PREFIX-overrides-rspamd:/overrides/rspamd"
     depends_on:
       - front
     labels:
