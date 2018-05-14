@@ -39,6 +39,7 @@ services:
       - "$ROOT/certs:/certs"
     labels:
       io.rancher.scheduler.affinity:host_label: role=worker
+      mailu-rancher: ${DOMAIN}
   redis:
     image: redis:alpine
     restart: always
@@ -77,7 +78,7 @@ services:
     volumes:
       - "$ROOT/redis:/data"
     labels:
-      io.rancher.scheduler.affinity:container_label: io.rancher.stack_service.name={{ .Stack.NAME }}/front
+      io.rancher.scheduler.affinity:container_label: mailu-rancher=${DOMAIN}
   imap:
     image: mailu/dovecot:$VERSION
     restart: always
@@ -120,7 +121,7 @@ services:
     depends_on:
       - front
     labels:
-      io.rancher.scheduler.affinity:container_label: io.rancher.stack_service.name={{ .Stack.NAME }}/front
+      io.rancher.scheduler.affinity:container_label: mailu-rancher=${DOMAIN}
   smtp:
     image: mailu/postfix:$VERSION
     restart: always
@@ -162,7 +163,7 @@ services:
     depends_on:
       - front
     labels:
-      io.rancher.scheduler.affinity:container_label: io.rancher.stack_service.name={{ .Stack.NAME }}/front
+      io.rancher.scheduler.affinity:container_label: mailu-rancher=${DOMAIN}
   antispam:
     image: mailu/rspamd:$VERSION
     restart: always
@@ -205,7 +206,7 @@ services:
     depends_on:
       - front
     labels:
-      io.rancher.scheduler.affinity:container_label: io.rancher.stack_service.name={{ .Stack.NAME }}/front
+      io.rancher.scheduler.affinity:container_label: mailu-rancher=${DOMAIN}
   antivirus:
     image: mailu/$ANTIVIRUS:$VERSION
     restart: always
@@ -244,7 +245,7 @@ services:
     volumes:
       - "$ROOT/filter:/data"
     labels:
-      io.rancher.scheduler.affinity:container_label: io.rancher.stack_service.name={{ .Stack.NAME }}/front
+      io.rancher.scheduler.affinity:container_label: mailu-rancher=${DOMAIN}
   webdav:
     image: mailu/$WEBDAV:$VERSION
     restart: always
@@ -283,7 +284,7 @@ services:
     volumes:
       - "$ROOT/dav:/data"
     labels:
-      io.rancher.scheduler.affinity:container_label: io.rancher.stack_service.name={{ .Stack.NAME }}/front
+      io.rancher.scheduler.affinity:container_label: mailu-rancher=${DOMAIN}
   admin:
     image: mailu/admin:$VERSION
     restart: always
@@ -326,7 +327,7 @@ services:
     depends_on:
       - redis
     labels:
-      io.rancher.scheduler.affinity:container_label: io.rancher.stack_service.name={{ .Stack.NAME }}/front
+      io.rancher.scheduler.affinity:container_label: mailu-rancher=${DOMAIN}
   webmail:
     image: "mailu/$WEBMAIL:$VERSION"
     restart: always
@@ -365,7 +366,7 @@ services:
     volumes:
       - "$ROOT/webmail:/data"
     labels:
-      io.rancher.scheduler.affinity:container_label: io.rancher.stack_service.name={{ .Stack.NAME }}/front
+      io.rancher.scheduler.affinity:container_label: mailu-rancher=${DOMAIN}
   fetchmail:
     image: mailu/fetchmail:$VERSION
     restart: always
@@ -404,4 +405,4 @@ services:
     volumes:
       - "$ROOT/data:/data"
     labels:
-      io.rancher.scheduler.affinity:container_label: io.rancher.stack_service.name={{ .Stack.NAME }}/front
+      io.rancher.scheduler.affinity:container_label: mailu-rancher=${DOMAIN}
