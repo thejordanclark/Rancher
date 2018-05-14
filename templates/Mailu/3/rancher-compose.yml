@@ -10,8 +10,8 @@ version: '2'
     default: "Mailu"
     required: true
     type: string
-  - variable: DRIVER
-    label: "Volume Driver"
+  - variable: STORAGE_DRIVER
+    label: "Storage Driver"
     description: "Set this to the Ranhcer data Driver user for Rancher Volumes"
     default: "rancher-nfs"
     required: true

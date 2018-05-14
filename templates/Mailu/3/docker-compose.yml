@@ -1,32 +1,23 @@
 version: '2'
 volumes:
   ${ROOT}-redis:
-    external: true
-    driver: ${DRIVER}
+    driver: ${STORAGE_DRIVER}
   ${ROOT}-certs:
-    external: true
-    driver: ${DRIVER}
+    driver: ${STORAGE_DRIVER}
   ${ROOT}-data:
-    external: true
-    driver: ${DRIVER}
+    driver: ${STORAGE_DRIVER}
   ${ROOT}-mail:
-    external: true
-    driver: ${DRIVER}
+    driver: ${STORAGE_DRIVER}
   ${ROOT}-overrides:
-    external: true
-    driver: ${DRIVER}
+    driver: ${STORAGE_DRIVER}
   ${ROOT}-filter:
-    external: true
-    driver: ${DRIVER}
+    driver: ${STORAGE_DRIVER}
   ${ROOT}-dkim:
-    external: true
-    driver: ${DRIVER}
+    driver: ${STORAGE_DRIVER}
   ${ROOT}-dav:
-    external: true
-    driver: ${DRIVER}
+    driver: ${STORAGE_DRIVER}
   ${ROOT}-webmail:
-    external: true
-    driver: ${DRIVER}
+    driver: ${STORAGE_DRIVER}
 services:
   front:
     image: mailu/nginx:$VERSION
