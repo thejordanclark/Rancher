@@ -5,9 +5,15 @@ version: '2'
   version: "v0.0.4"
   questions:
   - variable: ROOT
-    label: "Root"
-    description: "Set this to the path where Mailu data and configuration is stored."
-    default: "/mailu"
+    label: "Volume Prefix"
+    description: "Set this to the prefix Mailu data volumes and configurations and configuration is stored."
+    default: "Mailu"
+    required: true
+    type: string
+  - variable: DRIVER
+    label: "Volume Driver"
+    description: "Set this to the Ranhcer data Driver user for Rancher Volumes"
+    default: "rancher-nfs"
     required: true
     type: string
   - variable: VERSION

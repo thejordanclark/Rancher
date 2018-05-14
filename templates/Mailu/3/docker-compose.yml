@@ -1,4 +1,32 @@
 version: '2'
+volumes:
+  ${ROOT}-redis:
+    external: true
+    driver: ${DRIVER}
+  ${ROOT}-certs:
+    external: true
+    driver: ${DRIVER}
+  ${ROOT}-data:
+    external: true
+    driver: ${DRIVER}
+  ${ROOT}-mail:
+    external: true
+    driver: ${DRIVER}
+  ${ROOT}-overrides:
+    external: true
+    driver: ${DRIVER}
+  ${ROOT}-filter:
+    external: true
+    driver: ${DRIVER}
+  ${ROOT}-dkim:
+    external: true
+    driver: ${DRIVER}
+  ${ROOT}-dav:
+    external: true
+    driver: ${DRIVER}
+  ${ROOT}-webmail:
+    external: true
+    driver: ${DRIVER}
 services:
   front:
     image: mailu/nginx:$VERSION
@@ -36,7 +64,7 @@ services:
       COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
       PASSWORD_SCHEME: ${PASSWORD_SCHEME}
     volumes:
-      - "$ROOT/certs:/certs"
+      - "$ROOT-certs:/certs"
     labels:
       io.rancher.scheduler.affinity:host_label: role=worker
       mailu-rancher: ${DOMAIN}
@@ -76,7 +104,7 @@ services:
       COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
       PASSWORD_SCHEME: ${PASSWORD_SCHEME}
     volumes:
-      - "$ROOT/redis:/data"
+      - "$ROOT-redis:/data"
     labels:
       io.rancher.scheduler.affinity:container_label: mailu-rancher=${DOMAIN}
   imap:
@@ -115,9 +143,10 @@ services:
       COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
       PASSWORD_SCHEME: ${PASSWORD_SCHEME}
     volumes:
-      - "$ROOT/data:/data"
-      - "$ROOT/mail:/mail"
-      - "$ROOT/overrides:/overrides"
+      - "$ROOT-data:/data"
+      - "$ROOT-mail:/mail"
+      - "$ROOT-overrides:/overrides"
+      - "$ROOT-overrides-rspamd:/overrides/rspamd"
     depends_on:
       - front
     labels:
@@ -158,8 +187,9 @@ services:
       COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
       PASSWORD_SCHEME: ${PASSWORD_SCHEME}
     volumes:
-      - "$ROOT/data:/data"
-      - "$ROOT/overrides:/overrides"
+      - "$ROOT-data:/data"
+      - "$ROOT-overrides:/overrides"
+      - "$ROOT-overrides-rspamd:/overrides/rspamd"
     depends_on:
       - front
     labels:
@@ -200,9 +230,9 @@ services:
       COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
       PASSWORD_SCHEME: ${PASSWORD_SCHEME}
     volumes:
-      - "$ROOT/filter:/var/lib/rspamd"
-      - "$ROOT/dkim:/dkim"
-      - "$ROOT/overrides/rspamd:/etc/rspamd/override.d"
+      - "$ROOT-filter:/var/lib/rspamd"
+      - "$ROOT-dkim:/dkim"
+      - "$ROOT-overrides-rspamd:/etc/rspamd/override.d"
     depends_on:
       - front
     labels:
@@ -243,7 +273,7 @@ services:
       COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
       PASSWORD_SCHEME: ${PASSWORD_SCHEME}
     volumes:
-      - "$ROOT/filter:/data"
+      - "$ROOT-filter:/data"
     labels:
       io.rancher.scheduler.affinity:container_label: mailu-rancher=${DOMAIN}
   webdav:
@@ -282,7 +312,7 @@ services:
       COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
       PASSWORD_SCHEME: ${PASSWORD_SCHEME}
     volumes:
-      - "$ROOT/dav:/data"
+      - "$ROOT-dav:/data"
     labels:
       io.rancher.scheduler.affinity:container_label: mailu-rancher=${DOMAIN}
   admin:
@@ -321,8 +351,8 @@ services:
       COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
       PASSWORD_SCHEME: ${PASSWORD_SCHEME}
     volumes:
-      - "$ROOT/data:/data"
-      - "$ROOT/dkim:/dkim"
+      - "$ROOT-data:/data"
+      - "$ROOT-dkim:/dkim"
       - /var/run/docker.sock:/var/run/docker.sock:ro
     depends_on:
       - redis
@@ -364,7 +394,7 @@ services:
       COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
       PASSWORD_SCHEME: ${PASSWORD_SCHEME}
     volumes:
-      - "$ROOT/webmail:/data"
+      - "$ROOT-webmail:/data"
     labels:
       io.rancher.scheduler.affinity:container_label: mailu-rancher=${DOMAIN}
   fetchmail:
@@ -403,6 +433,6 @@ services:
       COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME}
       PASSWORD_SCHEME: ${PASSWORD_SCHEME}
     volumes:
-      - "$ROOT/data:/data"
+      - "$ROOT-data:/data"
     labels:
       io.rancher.scheduler.affinity:container_label: mailu-rancher=${DOMAIN}
